@@ -222,8 +222,17 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
-st.sidebar.markdown("🔗 [احصل على مفتاح مجاني من هنا](https://aistudio.google.com/)", unsafe_allow_html=True)
-api_key = st.sidebar.text_input("أدخل مفتاح Gemini API Key:", type="password")
+# وضع الرابط في المنتصف باستخدام HTML
+st.sidebar.markdown(
+    """
+    <div style="text-align: center; margin-bottom: 15px;">
+        <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
+            🔗 احصل على مفتاح مجاني من هنا
+        </a>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)api_key = st.sidebar.text_input("أدخل مفتاح Gemini API Key:", type="password")
 
 input_method = st.sidebar.radio("طريقة إدخال المحاضرة:", ["نسخ ولصق النص", "رفع ملف (PDF, Word, TXT)"])
 lecture_text = ""
