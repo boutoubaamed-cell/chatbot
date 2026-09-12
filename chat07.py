@@ -13,41 +13,43 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (حل جذري للغة العربية بدون تشويه المنصة)
+# تصميم وتنسيق CSS (حل جذري وموجه لـ RTL بدون تشويه)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. حماية الشريط العلوي المخفي لـ Streamlit لكي لا تظهر نصوص غريبة */
-[data-testid="stHeader"] {
-    direction: ltr !important;
-}
-
-/* 2. فرض اتجاه اليمين إلى اليسار (RTL) على كامل واجهة التطبيق بأمان */
-.stApp {
-    direction: rtl !important;
-}
-
-/* 3. توحيد الخط ومحاذاة كافة النصوص لليمين */
-html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
+/* 1. توحيد الخط لكامل الواجهة */
+* {
     font-family: 'Cairo', sans-serif;
 }
 
-.stMarkdown, .stText, [data-testid="stWidgetLabel"], [data-testid="stAlert"] {
-    text-align: right !important;
+/* 2. حماية الشريط العلوي الخاص بالنظام من الانعكاس */
+header[data-testid="stHeader"] * {
+    direction: ltr !important;
 }
 
-/* 4. حقول الإدخال وصندوق الشات */
-.stTextInput input, .stTextArea textarea, .stChatInput input, .stChatInput textarea {
+/* 3. فرض اتجاه اليمين (RTL) حصرياً على نصوص المحتوى */
+div.stMarkdown, div.stText, label, p, h1, h2, h3, h4, h5, h6, li {
     direction: rtl !important;
     text-align: right !important;
-    border-radius: 12px !important;
-    border: 1.5px solid #cbd5e1 !important;
-    background-color: #ffffff !important;
 }
 
-/* 5. بطاقات الشات (يمين) */
-[data-testid="stChatMessage"] {
+/* 4. حقول الإدخال (Inputs) وصندوق الشات السُفلي */
+div[data-baseweb="input"] > div, div[data-baseweb="textarea"] > div, div[data-testid="stChatInput"] {
+    direction: rtl !important;
+}
+input, textarea {
+    text-align: right !important;
+    direction: rtl !important;
+    border-radius: 12px !important;
+    background-color: #ffffff !important;
+}
+.stTextInput > div > div > input, .stTextArea > div > textarea {
+    border: 1.5px solid #cbd5e1 !important;
+}
+
+/* 5. بطاقات الشات الخاصة بالطلبة والمساعد الذكي */
+div[data-testid="stChatMessage"] {
     background-color: #ffffff;
     border-radius: 16px;
     padding: 1.2rem;
@@ -55,10 +57,13 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     border: 1px solid #e2e8f0;
     direction: rtl !important;
+}
+div[data-testid="stChatMessageContent"] {
+    direction: rtl !important;
     text-align: right !important;
 }
 
-/* 6. الترويسة العليا (في المنتصف) */
+/* 6. الترويسة العليا (جمالية وفي المنتصف) */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -70,6 +75,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    direction: rtl !important;
 }
 
 .badge-pill {
@@ -117,7 +123,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     justify-content: center;
 }
 
-/* 7. الشريط الجانبي */
+/* 7. الشريط الجانبي وتوسيط الروابط */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -125,7 +131,12 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
-/* 8. الأزرار الجانبية العادية */
+.center-text-sidebar, .center-text-sidebar * {
+    text-align: center !important;
+    direction: rtl !important;
+}
+
+/* 8. الأزرار العادية */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -142,7 +153,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* 9. زر البدء ثلاثي الأبعاد (الضخم) */
+/* 9. زر البدء ثلاثي الأبعاد (ChatBot) */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -184,6 +195,7 @@ button[kind="primary"] div, button[kind="primary"] p {
     font-weight: 600;
     line-height: 1.9;
     margin-top: 4rem;
+    direction: rtl !important;
 }
 </style>""", unsafe_allow_html=True)
 
@@ -234,23 +246,21 @@ header_html = f"""<div class="main-header-wrapper">
 st.markdown(header_html, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# الشريط الجانبي (محاذاة لليمين كما طلبت)
+# الشريط الجانبي
 # ---------------------------------------------------------
-# 1. عنوان المنصة (يمين)
 st.sidebar.markdown(
     """
-    <div style="text-align: right; direction: rtl; margin-bottom: 1.5rem; padding-right: 5px;">
+    <div class="center-text-sidebar" style="margin-bottom: 1.5rem;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
-        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px;"></div>
+        <div style="width: 40px; height: 4px; background-color: #2563eb; margin: 0 auto; border-radius: 5px;"></div>
     </div>
     """,
     unsafe_allow_html=True
 )
 
-# 2. الرابط (يمين)
 st.sidebar.markdown(
     """
-    <div style="text-align: right; direction: rtl; margin-bottom: 15px; padding-right: 5px;">
+    <div class="center-text-sidebar" style="margin-bottom: 15px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -291,21 +301,20 @@ else:
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    '<h3 style="text-align: right !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
     unsafe_allow_html=True
 )
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    '<h3 style="text-align: right !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
     unsafe_allow_html=True
 )
 
-# 3. قسم التواصل والإيميل (يمين)
 st.sidebar.markdown(
     """
-    <div style="text-align: right; direction: rtl; padding-right: 5px; font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div class="center-text-sidebar" style="font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
@@ -314,7 +323,7 @@ st.sidebar.markdown(
 )
 
 # ---------------------------------------------------------
-# واجهة الشات وتفعيل النموذج المستقر (3.6)
+# واجهة الشات وتفعيل النموذج
 # ---------------------------------------------------------
 if st.session_state.get("chat_active", False):
     st.markdown("---")
