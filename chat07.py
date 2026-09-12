@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (الحل الجذري المستقر لبيئة Streamlit)
+# تصميم وتنسيق CSS (مستقر، يحمي المنصة، ويضبط المحاذاة)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
@@ -23,9 +23,7 @@ st.markdown("""<style>
     font-family: 'Cairo', sans-serif;
 }
 
-/* 2. السر الاحترافي: تطبيق الاتجاه العربي (RTL) على "محتوى المستخدم" فقط.
-   هذا يبقي الشريط الجانبي في مكانه الطبيعي (يسار)، ويحمي أزرار المنصة من التشوه، 
-   ويجعل كافة النصوص والمدخلات تصطف من اليمين بشكل طبيعي. */
+/* 2. تطبيق الاتجاه العربي (RTL) على "محتوى المستخدم" فقط لحماية المنصة */
 [data-testid="stSidebarUserContent"], 
 [data-testid="stMainBlockContainer"], 
 .block-container {
@@ -33,12 +31,13 @@ st.markdown("""<style>
     text-align: right !important;
 }
 
-/* 3. فرض اليمين على كافة العناوين، النصوص، وعناصر الإدخال */
-.stMarkdown, .stText, [data-testid="stWidgetLabel"], label, p {
+/* 3. فرض اليمين على كافة النصوص الافتراضية، التنبيهات وعناصر الإدخال */
+.stMarkdown, .stText, [data-testid="stWidgetLabel"], label, p, .stRadio, .stCheckbox, [data-testid="stAlert"] {
+    direction: rtl !important;
     text-align: right !important;
 }
 
-/* 4. حقول الإدخال، صناديق الكتابة، والبحث */
+/* 4. حقول الإدخال، صناديق الكتابة */
 input, textarea, .stChatInput textarea {
     direction: rtl !important;
     text-align: right !important;
@@ -94,7 +93,19 @@ input, textarea, .stChatInput textarea {
     border: 1px solid rgba(147, 197, 253, 0.3);
 }
 
-/* 6. الأزرار الجانبية العادية */
+/* 6. بطاقات رسائل الشات (يمين) */
+[data-testid="stChatMessage"] {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* 7. الأزرار الجانبية العادية */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -111,7 +122,7 @@ input, textarea, .stChatInput textarea {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* 7. زر البدء الثلاثي الأبعاد */
+/* 8. زر البدء الثلاثي الأبعاد */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -124,13 +135,14 @@ button[kind="primary"] {
     white-space: pre-wrap !important;
     line-height: 1.5 !important;
     text-align: center !important;
+    color: white !important;
 }
 button[kind="primary"]:active {
     transform: translateY(8px) !important; 
     box-shadow: 0 0px 0 #047857, 0 5px 10px rgba(16, 185, 129, 0.4) !important;
 }
 
-/* 8. التذييل (Footer) */
+/* 9. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
@@ -189,21 +201,24 @@ header_html = f"""<div class="main-header-wrapper">
 st.markdown(header_html, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# الشريط الجانبي (بمكانه الأصلي مع محاذاة يمينية نظيفة)
+# الشريط الجانبي (العناوين في الوسط، الكتابة في اليمين)
 # ---------------------------------------------------------
+
+# 1. عنوان المنصة (في الوسط)
 st.sidebar.markdown(
     """
-    <div style="margin-bottom: 1.5rem;">
-        <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
-        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px;"></div>
+    <div style="text-align: center !important; margin-bottom: 1.5rem;">
+        <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px; text-align: center !important;">منصة التفاعل الأكاديمي الذكي</h2>
+        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px; margin: 0 auto;"></div>
     </div>
     """,
     unsafe_allow_html=True
 )
 
+# 2. الرابط (في أقصى اليمين)
 st.sidebar.markdown(
     """
-    <div style="margin-bottom: 15px;">
+    <div style="direction: rtl !important; text-align: right !important; margin-bottom: 15px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -212,6 +227,7 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
+# حقول الإدخال (تمت برمجتها لتكون في اليمين تلقائياً عبر الـ CSS)
 api_key = st.sidebar.text_input("أدخل مفتاح Gemini API Key:", type="password")
 
 input_method = st.sidebar.radio("طريقة إدخال المحاضرة:", ["نسخ ولصق النص", "رفع ملف (PDF, Word, TXT)"])
@@ -244,15 +260,25 @@ else:
 
 st.sidebar.markdown("---")
 
-st.sidebar.markdown('<h3 style="color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', unsafe_allow_html=True)
+# 3. عنوان الإعدادات (في الوسط)
+st.sidebar.markdown(
+    '<h3 style="text-align: center !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    unsafe_allow_html=True
+)
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
 
+# 4. عنوان التواصل (في الوسط)
+st.sidebar.markdown(
+    '<h3 style="text-align: center !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    unsafe_allow_html=True
+)
+
+# 5. الكتابة والإيميل (في أقصى اليمين)
 st.sidebar.markdown(
     """
-    <div style="font-family: 'Cairo', sans-serif; font-size: 14px;">
-        <h3 style="color: #1e3a8a; margin-bottom: 10px;">📬 تواصل معنا</h3>
+    <div style="direction: rtl !important; text-align: right !important; font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
@@ -364,7 +390,7 @@ else:
 # ---------------------------------------------------------
 footer_html = """<div class="footer-box">
 إصدار تجريبي © 2026 ® جميع الحقوق محفوظة<br>
-<span style="font-family: Arial, sans-serif; font-weight: bold; color: #1e3a8a;">Developed by Pr. Mohammed Boutouba</span><br>
+<span style="font-family: Arial, sans-serif; font-weight: bold; color: #1e3a8a;">Developed by Pr. Mohamed Boutouba</span><br>
 جامعة عين تموشنت ® الجزائر
 </div>"""
 
