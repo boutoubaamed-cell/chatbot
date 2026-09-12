@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (مستقر، آمن، ولا يظهر أي نصوص مخفية)
+# تصميم وتنسيق CSS 
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
@@ -29,7 +29,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     text-align: right !important;
 }
 
-/* 3. حقول الإدخال وصندوق الشات (يمين) */
+/* 3. حقول الإدخال وصندوق الشات في الشاشة الرئيسية (يمين) */
 .stTextInput input, .stTextArea textarea, .stChatInput input, .stChatInput textarea {
     direction: rtl !important;
     text-align: right !important;
@@ -118,9 +118,19 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
-/* استثناء التوسيط لروابط معينة (مثل رابط المفتاح) */
-.center-text-sidebar, .center-text-sidebar * {
-    text-align: center !important;
+/* 💡 محاذاة كافة نصوص وعناصر الشريط الجانبي إلى يسار الشاشة بناءً على طلبك */
+[data-testid="stSidebar"] .stMarkdown, 
+[data-testid="stSidebar"] .stMarkdown p,
+[data-testid="stSidebar"] .stText, 
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+    text-align: left !important;
+    direction: rtl !important;
+}
+
+[data-testid="stSidebar"] .stTextInput input, 
+[data-testid="stSidebar"] .stTextArea textarea {
+    text-align: left !important;
     direction: rtl !important;
 }
 
@@ -141,7 +151,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* 8. زر البدء ثلاثي الأبعاد (الضخم) */
+/* 8. زر البدء ثلاثي الأبعاد (الضخم) في الشاشة الرئيسية */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -234,22 +244,23 @@ header_html = f"""<div class="main-header-wrapper">
 st.markdown(header_html, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# الشريط الجانبي
+# الشريط الجانبي (تم محاذاته لليسار)
 # ---------------------------------------------------------
-# تم تحويل العنوان إلى اليمين بدلاً من المنتصف
+# 1. عنوان المنصة (يسار)
 st.sidebar.markdown(
     """
-    <div style="text-align: right; direction: rtl; margin-bottom: 1.5rem;">
+    <div style="text-align: left; direction: rtl; margin-bottom: 1.5rem; padding-left: 5px;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
-        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px;"></div>
+        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px; margin-right: auto; margin-left: 0;"></div>
     </div>
     """,
     unsafe_allow_html=True
 )
 
+# 2. الرابط (يسار)
 st.sidebar.markdown(
     """
-    <div class="center-text-sidebar" style="margin-bottom: 15px;">
+    <div style="text-align: left; direction: rtl; margin-bottom: 15px; padding-left: 5px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -289,22 +300,26 @@ else:
             st.sidebar.error(f"حدث خطأ أثناء قراءة الملف: {e}")
 
 st.sidebar.markdown("---")
+
+# عنوان الإعدادات (يسار)
 st.sidebar.markdown(
-    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    '<h3 style="text-align: left !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
     unsafe_allow_html=True
 )
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
+
+# عنوان التواصل (يسار)
 st.sidebar.markdown(
-    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    '<h3 style="text-align: left !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
     unsafe_allow_html=True
 )
 
-# تم تحويل الإيميل إلى اليمين
+# قسم التواصل والإيميل (يسار)
 st.sidebar.markdown(
     """
-    <div style="text-align: right; direction: rtl; font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div style="text-align: left; direction: rtl; padding-left: 5px; font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
