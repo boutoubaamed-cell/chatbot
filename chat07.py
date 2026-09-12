@@ -13,18 +13,26 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (ثابت ومستقر)
+# تصميم وتنسيق CSS (تم حل مشكلة الاتجاه من اليمين لليسار RTL جذرياً)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Cairo', sans-serif;
-    direction: rtl;
-    text-align: right;
-    background-color: #f1f5f9;
+/* 1. الفرض الجذري لاتجاه اليمين لليسار على كامل واجهة التطبيق */
+div[data-testid="stAppViewContainer"], 
+div[data-testid="stSidebar"], 
+div[data-testid="stHeader"],
+.stApp {
+    direction: rtl !important;
 }
 
+/* 2. محاذاة جميع النصوص العادية والماركداون لليمين */
+html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer"] > p, div[data-testid="stMarkdownContainer"] {
+    font-family: 'Cairo', sans-serif !important;
+    text-align: right !important;
+}
+
+/* 3. تنسيق الترويسة العليا (وإرجاع المحاذاة للمنتصف للعناوين) */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -36,11 +44,12 @@ html, body, [class*="css"] {
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    direction: rtl !important;
 }
 
 .badge-pill {
     background-color: rgba(59, 130, 246, 0.25);
-    color: #93c5fd;
+    color: #93c5fd !important;
     padding: 0.5rem 1.5rem;
     border-radius: 50px;
     font-size: 1.2rem;
@@ -48,6 +57,7 @@ html, body, [class*="css"] {
     display: inline-block;
     margin-bottom: 1rem;
     border: 1px solid rgba(147, 197, 253, 0.3);
+    text-align: center !important;
 }
 
 .header-text-section {
@@ -56,7 +66,7 @@ html, body, [class*="css"] {
     flex-direction: column;
     align-items: center; 
     justify-content: center;
-    text-align: center; 
+    text-align: center !important; 
     min-width: 300px;
 }
 
@@ -66,15 +76,15 @@ html, body, [class*="css"] {
     margin-bottom: 0.5rem;
     color: #ffffff !important;
     line-height: 1.3;
-    text-align: center;
+    text-align: center !important;
 }
 
 .header-sub {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #cbd5e1;
+    color: #cbd5e1 !important;
     margin: 0;
-    text-align: center; 
+    text-align: center !important; 
 }
 
 .header-image-section {
@@ -85,6 +95,7 @@ html, body, [class*="css"] {
     justify-content: center;
 }
 
+/* 4. الشريط الجانبي */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -92,10 +103,16 @@ html, body, [class*="css"] {
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
+/* استثناء التوسيط لروابط وأقسام معينة في الشريط الجانبي */
+.center-text-sidebar, .center-text-sidebar * {
+    text-align: center !important;
+}
+
+/* 5. الأزرار */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-    color: white;
+    color: white !important;
     border: none;
     padding: 0.7rem 1.2rem;
     border-radius: 12px;
@@ -109,31 +126,42 @@ html, body, [class*="css"] {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
+/* زر البدء ثلاثي الأبعاد */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     color: white !important;
-    font-size: 1.5rem !important;
+    font-size: 1.4rem !important;
     padding: 1.2rem 2rem !important;
-    border-radius: 50px !important;
+    border-radius: 20px !important;
     border: none !important;
-    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3) !important;
-    animation: pulse-btn 2s infinite !important;
+    box-shadow: 0 8px 0 #047857, 0 15px 20px rgba(16, 185, 129, 0.4) !important;
+    transition: all 0.15s ease !important;
     font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
+    white-space: pre-wrap !important;
+    line-height: 1.5 !important;
+    text-align: center !important; 
 }
 button[kind="primary"]:hover {
-    transform: translateY(-3px) scale(1.02) !important;
-    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.5) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 0 #047857, 0 20px 25px rgba(16, 185, 129, 0.5) !important;
 }
-@keyframes pulse-btn {
-    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
-    70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+button[kind="primary"]:active, button[kind="primary"]:focus {
+    transform: translateY(8px) !important; 
+    box-shadow: 0 0px 0 #047857, 0 5px 10px rgba(16, 185, 129, 0.4) !important;
+}
+button[kind="primary"] div, button[kind="primary"] p {
+    white-space: pre-wrap !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
 }
 
-.stTextInput input, .stTextArea textarea, .stChatInput input {
-    direction: rtl;
-    text-align: right;
+/* 6. حقول الإدخال ورسائل الشات (فرض اليمين هنا) */
+.stTextInput input, .stTextArea textarea, .stChatInput textarea, .stChatInput input {
+    direction: rtl !important;
+    text-align: right !important;
     border-radius: 12px !important;
     border: 1.5px solid #cbd5e1 !important;
     font-family: 'Cairo', sans-serif !important;
@@ -147,19 +175,23 @@ button[kind="primary"]:hover {
     margin-bottom: 1.2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     border: 1px solid #e2e8f0;
+    direction: rtl !important;
+    text-align: right !important;
 }
 
+/* 7. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
     padding: 1.8rem;
     border-radius: 16px;
-    text-align: center;
-    color: #64748b;
+    text-align: center !important;
+    color: #64748b !important;
     font-size: 14px;
     font-weight: 600;
     line-height: 1.9;
     margin-top: 4rem;
+    direction: rtl !important;
 }
 </style>""", unsafe_allow_html=True)
 
@@ -212,11 +244,9 @@ st.markdown(header_html, unsafe_allow_html=True)
 # ---------------------------------------------------------
 # الشريط الجانبي
 # ---------------------------------------------------------
-
-# 1. العنوان الرئيسي في المنتصف
 st.sidebar.markdown(
     """
-    <div style="text-align: center; margin-bottom: 1.5rem;">
+    <div class="center-text-sidebar" style="margin-bottom: 1.5rem;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
         <div style="width: 40px; height: 4px; background-color: #2563eb; margin: 0 auto; border-radius: 5px;"></div>
     </div>
@@ -224,10 +254,9 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
-# 2. الرابط في المنتصف
 st.sidebar.markdown(
     """
-    <div style="text-align: center; margin-bottom: 15px;">
+    <div class="center-text-sidebar" style="margin-bottom: 15px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -236,7 +265,6 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
-# تم تصحيح الخطأ البرمجي هنا (فصل المتغير في سطر جديد)
 api_key = st.sidebar.text_input("أدخل مفتاح Gemini API Key:", type="password")
 
 input_method = st.sidebar.radio("طريقة إدخال المحاضرة:", ["نسخ ولصق النص", "رفع ملف (PDF, Word, TXT)"])
@@ -268,26 +296,21 @@ else:
             st.sidebar.error(f"حدث خطأ أثناء قراءة الملف: {e}")
 
 st.sidebar.markdown("---")
-
-# 3. العناوين من أقصى اليمين باستخدام HTML لضمان المحاذاة المطلقة
 st.sidebar.markdown(
-    '<h3 style="text-align: right; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    '<h3 style="text-align: right !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
     unsafe_allow_html=True
 )
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
-
-# عنوان "تواصل معنا" من أقصى اليمين
 st.sidebar.markdown(
-    '<h3 style="text-align: right; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    '<h3 style="text-align: right !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
     unsafe_allow_html=True
 )
 
-# نص "لأي استفسار" والإيميل في المنتصف بشكل أنيق
 st.sidebar.markdown(
     """
-    <div style="text-align: center; font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div class="center-text-sidebar" style="font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
@@ -320,7 +343,6 @@ if st.session_state.get("chat_active", False):
         with st.spinner("جاري المعالجة..."):
             try:
                 audio_bytes = audio_value.read()
-                # تم إعادة النموذج إلى المستقر 3.6-flash هنا
                 transcription_response = st.session_state.client.models.generate_content(
                     model="gemini-3.6-flash",
                     contents=[
@@ -369,7 +391,6 @@ else:
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        # إضافة \n هنا لكسر السطر ليصبح الزر ضخماً ومتناسقاً كما طلبته
         start_button = st.button("🚀 بدء جلسة الشات التفاعلية للطلبة\nChatBot", type="primary", use_container_width=True)
 
     if start_button:
@@ -387,7 +408,6 @@ else:
 محتوى المحاضرة الرسمية:
 {lecture_text}"""
 
-                # تم إعادة النموذج إلى المستقر 3.6-flash هنا أيضاً
                 st.session_state.chat = st.session_state.client.chats.create(
                     model="gemini-3.6-flash",
                     config=types.GenerateContentConfig(system_instruction=system_instruction)
@@ -402,7 +422,7 @@ else:
 # ---------------------------------------------------------
 footer_html = """<div class="footer-box">
 إصدار تجريبي © 2026 ® جميع الحقوق محفوظة<br>
-<span style="font-family: Arial, sans-serif; font-weight: bold; color: #1e3a8a;">Developed by Pr. Mohammed Boutouba</span><br>
+<span style="font-family: Arial, sans-serif; font-weight: bold; color: #1e3a8a;">Developed by Pr. Mohamed Boutouba</span><br>
 جامعة عين تموشنت ® الجزائر
 </div>"""
 
