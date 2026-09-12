@@ -13,23 +13,30 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS 
+# تصميم وتنسيق CSS (موجه ومحمي 100% لبيئة Streamlit)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. توحيد الخط بأمان تام */
-html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
-    font-family: 'Cairo', sans-serif;
+* { font-family: 'Cairo', sans-serif; }
+
+/* 1. حماية الشريط العلوي لـ Streamlit بالكامل لتجنب ظهور أي نص مخفي */
+header[data-testid="stHeader"] {
+    direction: ltr !important;
 }
 
-/* 2. استهداف نصوص المحتوى فقط للیمین (RTL) دون المساس بهيكل المنصة */
-.stMarkdown, .stText, [data-testid="stWidgetLabel"], [data-testid="stAlert"] {
+/* 2. توجيه الحاويات الأساسية لليمين بأمان */
+[data-testid="stSidebar"], [data-testid="stMainBlockContainer"] {
+    direction: rtl !important;
+}
+
+/* 3. فرض اتجاه اليمين على عناصر واجهة المستخدم القياسية */
+[data-testid="stWidgetLabel"], .stMarkdown, .stText, .stRadio, .stCheckbox, [data-testid="stAlert"] {
     direction: rtl !important;
     text-align: right !important;
 }
 
-/* 3. حقول الإدخال وصندوق الشات في الشاشة الرئيسية (يمين) */
+/* 4. حقول الإدخال وصندوق الشات */
 .stTextInput input, .stTextArea textarea, .stChatInput input, .stChatInput textarea {
     direction: rtl !important;
     text-align: right !important;
@@ -38,7 +45,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     background-color: #ffffff !important;
 }
 
-/* 4. بطاقات الشات (يمين) */
+/* 5. بطاقات رسائل الشات */
 [data-testid="stChatMessage"] {
     background-color: #ffffff;
     border-radius: 16px;
@@ -50,7 +57,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     text-align: right !important;
 }
 
-/* 5. الترويسة العليا (جمالية وفي المنتصف) */
+/* 6. الترويسة العلوية الجميلة */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -64,7 +71,18 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     border: 1px solid rgba(255, 255, 255, 0.1);
     direction: rtl !important; 
 }
-
+.header-text-section * { text-align: center !important; }
+.header-text-section h1 {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    margin-bottom: 0.5rem;
+}
+.header-sub {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #cbd5e1 !important;
+}
 .badge-pill {
     background-color: rgba(59, 130, 246, 0.25);
     color: #93c5fd !important;
@@ -75,83 +93,9 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     display: inline-block;
     margin-bottom: 1rem;
     border: 1px solid rgba(147, 197, 253, 0.3);
-    text-align: center !important;
 }
 
-.header-text-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center;
-}
-
-.header-text-section h1 {
-    font-size: 2.3rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    color: #ffffff !important;
-    line-height: 1.3;
-    text-align: center !important;
-}
-
-.header-sub {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #cbd5e1 !important;
-    margin: 0;
-    text-align: center !important; 
-}
-
-.header-image-section {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 6. تصميم الشريط الجانبي الداخلي */
-[data-testid="stSidebar"] {
-    background-color: #ffffff;
-    border-left: 1px solid #e2e8f0;
-    padding-top: 1.5rem;
-    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
-}
-
-/* 💡 محاذاة كافة نصوص وعناصر الشريط الجانبي إلى اليسار */
-[data-testid="stSidebar"] .stMarkdown, 
-[data-testid="stSidebar"] .stMarkdown p,
-[data-testid="stSidebar"] .stText, 
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
-    text-align: left !important;
-    direction: rtl !important;
-}
-
-[data-testid="stSidebar"] .stTextInput input, 
-[data-testid="stSidebar"] .stTextArea textarea {
-    text-align: left !important;
-    direction: rtl !important;
-}
-
-/* 7. الأزرار الجانبية العادية */
-.stButton>button {
-    width: 100%;
-    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-    color: white !important;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-}
-.stButton>button:hover {
-    opacity: 0.92;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
-}
-
-/* 8. زر البدء ثلاثي الأبعاد (الضخم) في الشاشة الرئيسية */
+/* 7. تصميم زر بدء الشات الثلاثي الأبعاد */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -164,12 +108,9 @@ button[kind="primary"] {
     white-space: pre-wrap !important;
     line-height: 1.5 !important;
     text-align: center !important;
+    color: white !important;
 }
-button[kind="primary"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 0 #047857, 0 20px 25px rgba(16, 185, 129, 0.5) !important;
-}
-button[kind="primary"]:active, button[kind="primary"]:focus {
+button[kind="primary"]:active {
     transform: translateY(8px) !important; 
     box-shadow: 0 0px 0 #047857, 0 5px 10px rgba(16, 185, 129, 0.4) !important;
 }
@@ -181,7 +122,7 @@ button[kind="primary"] div, button[kind="primary"] p {
     justify-content: center !important;
 }
 
-/* 9. التذييل (Footer) */
+/* 8. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
@@ -191,7 +132,6 @@ button[kind="primary"] div, button[kind="primary"] p {
     color: #64748b !important;
     font-size: 14px;
     font-weight: 600;
-    line-height: 1.9;
     margin-top: 4rem;
     direction: rtl !important;
 }
@@ -217,15 +157,11 @@ for path in possible_paths:
                 file_bytes = f.read()
                 encoded_img = base64.b64encode(file_bytes).decode("utf-8")
                 mime_type = "image/gif" if file_bytes.startswith(b'GIF') else "image/jpeg"
-
                 img_html = f'<img src="data:{mime_type};base64,{encoded_img}" style="width: 150px; height: auto; object-fit: contain; mix-blend-mode: screen; filter: drop-shadow(0px 10px 25px rgba(0,0,0,0.4));">'
                 image_found = True
                 break
         except Exception:
             pass
-
-if not image_found:
-    st.error("⚠️ تنبيه: لم يتم العثور على ملف الصورة.")
 
 # ---------------------------------------------------------
 # الترويسة العليا
@@ -233,39 +169,30 @@ if not image_found:
 header_html = f"""<div class="main-header-wrapper">
 <div class="header-text-section">
 <span class="badge-pill">✨ منصة التفاعل الأكاديمي الذكي</span>
-<h1 style="color: white; font-family: 'Cairo', sans-serif;">مساعد الذكاء الاصطناعي التفاعلي للمحاضرات</h1>
+<h1>مساعد الذكاء الاصطناعي التفاعلي للمحاضرات</h1>
 <div class="header-sub">ChatBot * Lecture</div>
 </div>
-<div class="header-image-section">
-{img_html}
-</div>
+<div class="header-image-section">{img_html}</div>
 </div>"""
 
 st.markdown(header_html, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# الشريط الجانبي (تمت محاذاته لليسار)
+# الشريط الجانبي (محاذاة إجبارية قاطعة لليمين باستخدام Inline HTML)
 # ---------------------------------------------------------
-# 1. عنوان المنصة (يسار)
-st.sidebar.markdown(
-    """
-    <div style="text-align: left; direction: rtl; margin-bottom: 1.5rem; padding-left: 5px;">
-        <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
-        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px; margin-right: auto; margin-left: 0;"></div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
-# 2. الرابط (يسار)
+# عنوان المنصة والرابط
 st.sidebar.markdown(
     """
-    <div style="text-align: left; direction: rtl; margin-bottom: 15px; padding-left: 5px;">
+    <div style="direction: rtl; text-align: right; width: 100%; margin-bottom: 1.5rem;">
+        <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
+        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px; margin-left: auto; margin-right: 0;"></div>
+        <br>
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
     </div>
-    """, 
+    """,
     unsafe_allow_html=True
 )
 
@@ -301,25 +228,24 @@ else:
 
 st.sidebar.markdown("---")
 
-# عنوان الإعدادات (يسار)
+# الإعدادات
 st.sidebar.markdown(
-    '<h3 style="text-align: left !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    """
+    <div style="direction: rtl; text-align: right; width: 100%;">
+        <h3 style="color: #1e3a8a; font-family: 'Cairo', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>
+    </div>
+    """, 
     unsafe_allow_html=True
 )
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
 
-# عنوان التواصل (يسار)
-st.sidebar.markdown(
-    '<h3 style="text-align: left !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
-    unsafe_allow_html=True
-)
-
-# قسم التواصل والإيميل (يسار)
+# التواصل
 st.sidebar.markdown(
     """
-    <div style="text-align: left; direction: rtl; padding-left: 5px; font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div style="direction: rtl; text-align: right; width: 100%; font-family: 'Cairo', sans-serif; font-size: 14px;">
+        <h3 style="color: #1e3a8a; margin-bottom: 10px;">📬 تواصل معنا</h3>
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
