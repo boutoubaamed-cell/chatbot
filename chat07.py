@@ -13,27 +13,35 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (آمن ونظيف 100% لتجنب تشوه المنصة)
+# تصميم وتنسيق CSS (تم تطبيق RTL حصرياً على المحتوى والبطاقات)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. الخط الأساسي للواجهة */
-* {
-    font-family: 'Cairo', sans-serif;
+/* 1. توحيد الخط لكامل التطبيق */
+html, body, [class*="css"], [class*="st-"] {
+    font-family: 'Cairo', sans-serif !important;
 }
 
-/* 2. توجيه الحاويات الأساسية لليمين (بشكل آمن لا يضر بأزرار Streamlit العلوية) */
-[data-testid="stAppViewContainer"], [data-testid="stSidebar"] {
+/* 2. الفرض الدقيق لـ RTL على حاويات المحتوى فقط (تجنب الهيدر وأزرار النظام) */
+[data-testid="stMainBlockContainer"], 
+[data-testid="stSidebarUserContent"],
+[data-testid="stAlert"] {
     direction: rtl !important;
-}
-
-/* 3. محاذاة نصوص المحتوى لليمين */
-[data-testid="stMarkdownContainer"] {
     text-align: right !important;
 }
 
-/* 4. حقول الإدخال وصندوق الدردشة */
+/* 3. توجيه جميع الفقرات، العناوين، والنصوص في الماركداون لليمين */
+[data-testid="stMarkdownContainer"], 
+[data-testid="stMarkdownContainer"] p, 
+[data-testid="stMarkdownContainer"] h1, 
+[data-testid="stMarkdownContainer"] h2, 
+[data-testid="stMarkdownContainer"] h3 {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* 4. حقول الإدخال وصندوق الدردشة (Input & Textarea) */
 .stTextInput input, .stTextArea textarea, [data-testid="stChatInput"] textarea, .stChatInput input {
     direction: rtl !important;
     text-align: right !important;
@@ -42,8 +50,8 @@ st.markdown("""<style>
     background-color: #ffffff !important;
 }
 
-/* 5. بطاقات الشات */
-.stChatMessage {
+/* 5. بطاقات الشات (Chat Messages) */
+[data-testid="stChatMessage"] {
     background-color: #ffffff;
     border-radius: 16px;
     padding: 1.2rem;
@@ -54,7 +62,7 @@ st.markdown("""<style>
     text-align: right !important;
 }
 
-/* 6. الترويسة العليا (جمالية ومحاذاة في المنتصف) */
+/* 6. الترويسة العليا (محاذاة في المنتصف مع بقاء الخط العربي) */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -66,7 +74,7 @@ st.markdown("""<style>
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    direction: rtl !important;
+    direction: rtl !important; /* الهيدر الخاص بنا فقط موجه لليمين */
 }
 
 .badge-pill {
@@ -114,7 +122,7 @@ st.markdown("""<style>
     justify-content: center;
 }
 
-/* 7. تصميم الشريط الجانبي */
+/* 7. تصميم الشريط الجانبي الداخلي (ألوان وظلال) */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -122,7 +130,12 @@ st.markdown("""<style>
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
-/* الأزرار الجانبية العادية */
+/* استثناء التوسيط الجمالي للروابط في الشريط الجانبي */
+.center-text-sidebar, .center-text-sidebar * {
+    text-align: center !important;
+}
+
+/* 8. الأزرار العادية */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -139,7 +152,7 @@ st.markdown("""<style>
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* 8. زر البدء ثلاثي الأبعاد */
+/* 9. زر البدء ثلاثي الأبعاد */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -161,8 +174,15 @@ button[kind="primary"]:active, button[kind="primary"]:focus {
     transform: translateY(8px) !important; 
     box-shadow: 0 0px 0 #047857, 0 5px 10px rgba(16, 185, 129, 0.4) !important;
 }
+button[kind="primary"] div, button[kind="primary"] p {
+    white-space: pre-wrap !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
 
-/* 9. التذييل (Footer) */
+/* 10. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
@@ -229,7 +249,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 # ---------------------------------------------------------
 st.sidebar.markdown(
     """
-    <div style="text-align: center; margin-bottom: 1.5rem;">
+    <div class="center-text-sidebar" style="margin-bottom: 1.5rem;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
         <div style="width: 40px; height: 4px; background-color: #2563eb; margin: 0 auto; border-radius: 5px;"></div>
     </div>
@@ -239,7 +259,7 @@ st.sidebar.markdown(
 
 st.sidebar.markdown(
     """
-    <div style="text-align: center; margin-bottom: 15px;">
+    <div class="center-text-sidebar" style="margin-bottom: 15px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -280,20 +300,20 @@ else:
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    '<h3 style="text-align: right !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
     unsafe_allow_html=True
 )
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    '<h3 style="text-align: right !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
     unsafe_allow_html=True
 )
 
 st.sidebar.markdown(
     """
-    <div style="text-align: center; font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div class="center-text-sidebar" style="font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
