@@ -13,36 +13,24 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (تم تطبيق RTL حصرياً على المحتوى والبطاقات)
+# تصميم وتنسيق CSS (مستقر، آمن، ولا يظهر أي نصوص مخفية)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. توحيد الخط لكامل التطبيق */
-html, body, [class*="css"], [class*="st-"] {
-    font-family: 'Cairo', sans-serif !important;
+/* 1. توحيد الخط بأمان تام */
+html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
+    font-family: 'Cairo', sans-serif;
 }
 
-/* 2. الفرض الدقيق لـ RTL على حاويات المحتوى فقط (تجنب الهيدر وأزرار النظام) */
-[data-testid="stMainBlockContainer"], 
-[data-testid="stSidebarUserContent"],
-[data-testid="stAlert"] {
+/* 2. استهداف نصوص المحتوى فقط للیمین (RTL) دون المساس بهيكل المنصة */
+.stMarkdown, .stText, [data-testid="stWidgetLabel"], [data-testid="stAlert"] {
     direction: rtl !important;
     text-align: right !important;
 }
 
-/* 3. توجيه جميع الفقرات، العناوين، والنصوص في الماركداون لليمين */
-[data-testid="stMarkdownContainer"], 
-[data-testid="stMarkdownContainer"] p, 
-[data-testid="stMarkdownContainer"] h1, 
-[data-testid="stMarkdownContainer"] h2, 
-[data-testid="stMarkdownContainer"] h3 {
-    direction: rtl !important;
-    text-align: right !important;
-}
-
-/* 4. حقول الإدخال وصندوق الدردشة (Input & Textarea) */
-.stTextInput input, .stTextArea textarea, [data-testid="stChatInput"] textarea, .stChatInput input {
+/* 3. حقول الإدخال وصندوق الشات (يمين) */
+.stTextInput input, .stTextArea textarea, .stChatInput input, .stChatInput textarea {
     direction: rtl !important;
     text-align: right !important;
     border-radius: 12px !important;
@@ -50,7 +38,7 @@ html, body, [class*="css"], [class*="st-"] {
     background-color: #ffffff !important;
 }
 
-/* 5. بطاقات الشات (Chat Messages) */
+/* 4. بطاقات الشات (يمين) */
 [data-testid="stChatMessage"] {
     background-color: #ffffff;
     border-radius: 16px;
@@ -62,7 +50,7 @@ html, body, [class*="css"], [class*="st-"] {
     text-align: right !important;
 }
 
-/* 6. الترويسة العليا (محاذاة في المنتصف مع بقاء الخط العربي) */
+/* 5. الترويسة العليا (جمالية وفي المنتصف) */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -74,7 +62,7 @@ html, body, [class*="css"], [class*="st-"] {
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    direction: rtl !important; /* الهيدر الخاص بنا فقط موجه لليمين */
+    direction: rtl !important; 
 }
 
 .badge-pill {
@@ -122,7 +110,7 @@ html, body, [class*="css"], [class*="st-"] {
     justify-content: center;
 }
 
-/* 7. تصميم الشريط الجانبي الداخلي (ألوان وظلال) */
+/* 6. تصميم الشريط الجانبي الداخلي */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -130,12 +118,13 @@ html, body, [class*="css"], [class*="st-"] {
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
-/* استثناء التوسيط الجمالي للروابط في الشريط الجانبي */
+/* استثناء التوسيط لروابط وعناوين معينة */
 .center-text-sidebar, .center-text-sidebar * {
     text-align: center !important;
+    direction: rtl !important;
 }
 
-/* 8. الأزرار العادية */
+/* 7. الأزرار الجانبية العادية */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -152,7 +141,7 @@ html, body, [class*="css"], [class*="st-"] {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* 9. زر البدء ثلاثي الأبعاد */
+/* 8. زر البدء ثلاثي الأبعاد (الضخم) */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -182,7 +171,7 @@ button[kind="primary"] div, button[kind="primary"] p {
     justify-content: center !important;
 }
 
-/* 10. التذييل (Footer) */
+/* 9. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
