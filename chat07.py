@@ -369,7 +369,7 @@ else:
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        start_button = st.button("🚀 بدء جلسة الشات التفاعلية للطلبة", type="primary", use_container_width=True)
+        start_button = st.button("🚀  ChatBot بدء جلسة الشات التفاعلية للطلبة", type="primary", use_container_width=True)
 
     if start_button:
         if not api_key:
