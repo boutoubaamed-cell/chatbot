@@ -401,7 +401,7 @@ else:
 # ---------------------------------------------------------
 footer_html = """<div class="footer-box">
 إصدار تجريبي © 2026 ® جميع الحقوق محفوظة<br>
-<span style="font-family: Arial, sans-serif; font-weight: bold; color: #1e3a8a;">Developed by Pr. Mohamed Boutouba</span><br>
+<span style="font-family: Arial, sans-serif; font-weight: bold; color: #1e3a8a;">Developed by Pr. Mohammed Boutouba</span><br>
 جامعة عين تموشنت ® الجزائر
 </div>"""
 
