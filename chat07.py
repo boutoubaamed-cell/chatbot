@@ -118,19 +118,19 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
-/* 💡 محاذاة كافة نصوص وعناصر الشريط الجانبي إلى يسار الشاشة بناءً على طلبك */
+/* 💡 محاذاة كافة نصوص وعناصر الشريط الجانبي إلى اليمين */
 [data-testid="stSidebar"] .stMarkdown, 
 [data-testid="stSidebar"] .stMarkdown p,
 [data-testid="stSidebar"] .stText, 
 [data-testid="stSidebar"] [data-testid="stWidgetLabel"],
 [data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
-    text-align: left !important;
+    text-align: right !important;
     direction: rtl !important;
 }
 
 [data-testid="stSidebar"] .stTextInput input, 
 [data-testid="stSidebar"] .stTextArea textarea {
-    text-align: left !important;
+    text-align: right !important;
     direction: rtl !important;
 }
 
@@ -244,23 +244,23 @@ header_html = f"""<div class="main-header-wrapper">
 st.markdown(header_html, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# الشريط الجانبي (تم محاذاته لليسار)
+# الشريط الجانبي (تمت محاذاته لليمين)
 # ---------------------------------------------------------
-# 1. عنوان المنصة (يسار)
+# 1. عنوان المنصة (يمين)
 st.sidebar.markdown(
     """
-    <div style="text-align: left; direction: rtl; margin-bottom: 1.5rem; padding-left: 5px;">
+    <div style="text-align: right; direction: rtl; margin-bottom: 1.5rem; padding-right: 5px;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
-        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px; margin-right: auto; margin-left: 0;"></div>
+        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px;"></div>
     </div>
     """,
     unsafe_allow_html=True
 )
 
-# 2. الرابط (يسار)
+# 2. الرابط (يمين)
 st.sidebar.markdown(
     """
-    <div style="text-align: left; direction: rtl; margin-bottom: 15px; padding-left: 5px;">
+    <div style="text-align: right; direction: rtl; margin-bottom: 15px; padding-right: 5px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -301,25 +301,25 @@ else:
 
 st.sidebar.markdown("---")
 
-# عنوان الإعدادات (يسار)
+# عنوان الإعدادات (يمين)
 st.sidebar.markdown(
-    '<h3 style="text-align: left !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
     unsafe_allow_html=True
 )
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
 
-# عنوان التواصل (يسار)
+# عنوان التواصل (يمين)
 st.sidebar.markdown(
-    '<h3 style="text-align: left !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    '<h3 style="text-align: right !important; direction: rtl !important; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
     unsafe_allow_html=True
 )
 
-# قسم التواصل والإيميل (يسار)
+# قسم التواصل والإيميل (يمين)
 st.sidebar.markdown(
     """
-    <div style="text-align: left; direction: rtl; padding-left: 5px; font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div style="text-align: right; direction: rtl; padding-right: 5px; font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
