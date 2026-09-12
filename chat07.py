@@ -13,26 +13,55 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (تم حل مشكلة الاتجاه من اليمين لليسار RTL جذرياً)
+# تصميم وتنسيق CSS (تم الفرض الجذري للـ RTL هنا)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. الفرض الجذري لاتجاه اليمين لليسار على كامل واجهة التطبيق */
-div[data-testid="stAppViewContainer"], 
-div[data-testid="stSidebar"], 
-div[data-testid="stHeader"],
-.stApp {
+/* 1. الفرض الجذري لاتجاه اليمين لليسار (RTL) على جذور التطبيق بالكامل */
+.stApp, [data-testid="stAppViewContainer"], [data-testid="stSidebar"], [data-testid="stHeader"], [data-testid="stToolbar"] {
     direction: rtl !important;
 }
 
-/* 2. محاذاة جميع النصوص العادية والماركداون لليمين */
-html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer"] > p, div[data-testid="stMarkdownContainer"] {
+/* 2. محاذاة كافة النصوص، العناوين، الفقرات، والصناديق حصرياً لليمين */
+html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownContainer"] {
     font-family: 'Cairo', sans-serif !important;
     text-align: right !important;
 }
 
-/* 3. تنسيق الترويسة العليا (وإرجاع المحاذاة للمنتصف للعناوين) */
+/* 3. صناديق التنبيه (Alerts) والبطاقات (Cards) وحقول الراديو */
+[data-testid="stAlert"], [data-testid="stException"], .stRadio {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* 4. حقول الإدخال (Text Inputs) وصندوق الشات السفلي (Chat Input) */
+.stTextInput input, .stTextArea textarea, [data-testid="stChatInput"] textarea, .stChatInput input {
+    direction: rtl !important;
+    text-align: right !important;
+    border-radius: 12px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    background-color: #ffffff !important;
+}
+
+/* 5. بطاقات الشات (Chat Messages) الخاصة بالنقاش الطلابي */
+.stChatMessage {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* 6. استثناء التوسيط الجمالي للترويسة، التذييل، والزر الرئيسي فقط */
+.header-text-section *, .center-text-sidebar *, .footer-box, button[kind="primary"] * {
+    text-align: center !important;
+}
+
+/* --- باقي التنسيقات الجمالية --- */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -44,7 +73,6 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    direction: rtl !important;
 }
 
 .badge-pill {
@@ -57,7 +85,6 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     display: inline-block;
     margin-bottom: 1rem;
     border: 1px solid rgba(147, 197, 253, 0.3);
-    text-align: center !important;
 }
 
 .header-text-section {
@@ -66,7 +93,6 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     flex-direction: column;
     align-items: center; 
     justify-content: center;
-    text-align: center !important; 
     min-width: 300px;
 }
 
@@ -76,7 +102,6 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     margin-bottom: 0.5rem;
     color: #ffffff !important;
     line-height: 1.3;
-    text-align: center !important;
 }
 
 .header-sub {
@@ -84,18 +109,15 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     font-weight: 600;
     color: #cbd5e1 !important;
     margin: 0;
-    text-align: center !important; 
 }
 
 .header-image-section {
     flex: 0 0 auto;
-    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* 4. الشريط الجانبي */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -103,12 +125,7 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
-/* استثناء التوسيط لروابط وأقسام معينة في الشريط الجانبي */
-.center-text-sidebar, .center-text-sidebar * {
-    text-align: center !important;
-}
-
-/* 5. الأزرار */
+/* الأزرار الجانبية العادية */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -117,7 +134,6 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
     padding: 0.7rem 1.2rem;
     border-radius: 12px;
     font-weight: 700;
-    font-family: 'Cairo', sans-serif;
     transition: all 0.3s ease;
 }
 .stButton>button:hover {
@@ -129,7 +145,6 @@ html, body, [class*="css"], [class*="st-"], div[data-testid="stMarkdownContainer
 /* زر البدء ثلاثي الأبعاد */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
-    color: white !important;
     font-size: 1.4rem !important;
     padding: 1.2rem 2rem !important;
     border-radius: 20px !important;
@@ -139,7 +154,6 @@ button[kind="primary"] {
     font-weight: 800 !important;
     white-space: pre-wrap !important;
     line-height: 1.5 !important;
-    text-align: center !important; 
 }
 button[kind="primary"]:hover {
     transform: translateY(-2px) !important;
@@ -149,43 +163,13 @@ button[kind="primary"]:active, button[kind="primary"]:focus {
     transform: translateY(8px) !important; 
     box-shadow: 0 0px 0 #047857, 0 5px 10px rgba(16, 185, 129, 0.4) !important;
 }
-button[kind="primary"] div, button[kind="primary"] p {
-    white-space: pre-wrap !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-}
 
-/* 6. حقول الإدخال ورسائل الشات (فرض اليمين هنا) */
-.stTextInput input, .stTextArea textarea, .stChatInput textarea, .stChatInput input {
-    direction: rtl !important;
-    text-align: right !important;
-    border-radius: 12px !important;
-    border: 1.5px solid #cbd5e1 !important;
-    font-family: 'Cairo', sans-serif !important;
-    background-color: #ffffff !important;
-}
-
-.stChatMessage {
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 1.2rem;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    border: 1px solid #e2e8f0;
-    direction: rtl !important;
-    text-align: right !important;
-}
-
-/* 7. التذييل (Footer) */
+/* التذييل */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
     padding: 1.8rem;
     border-radius: 16px;
-    text-align: center !important;
     color: #64748b !important;
     font-size: 14px;
     font-weight: 600;
