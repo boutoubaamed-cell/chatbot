@@ -212,6 +212,8 @@ st.markdown(header_html, unsafe_allow_html=True)
 # ---------------------------------------------------------
 # الشريط الجانبي
 # ---------------------------------------------------------
+
+# 1. العنوان الرئيسي في المنتصف
 st.sidebar.markdown(
     """
     <div style="text-align: center; margin-bottom: 1.5rem;">
@@ -222,7 +224,7 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
-# وضع الرابط في المنتصف باستخدام HTML
+# 2. الرابط في المنتصف
 st.sidebar.markdown(
     """
     <div style="text-align: center; margin-bottom: 15px;">
@@ -232,7 +234,10 @@ st.sidebar.markdown(
     </div>
     """, 
     unsafe_allow_html=True
-)api_key = st.sidebar.text_input("أدخل مفتاح Gemini API Key:", type="password")
+)
+
+# تم تصحيح الخطأ البرمجي هنا (فصل المتغير في سطر جديد)
+api_key = st.sidebar.text_input("أدخل مفتاح Gemini API Key:", type="password")
 
 input_method = st.sidebar.radio("طريقة إدخال المحاضرة:", ["نسخ ولصق النص", "رفع ملف (PDF, Word, TXT)"])
 lecture_text = ""
@@ -263,12 +268,32 @@ else:
             st.sidebar.error(f"حدث خطأ أثناء قراءة الملف: {e}")
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚙️ إعدادات")
+
+# 3. العناوين من أقصى اليمين باستخدام HTML لضمان المحاذاة المطلقة
+st.sidebar.markdown(
+    '<h3 style="text-align: right; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">⚙️ إعدادات</h3>', 
+    unsafe_allow_html=True
+)
 voice_output_enabled = st.sidebar.checkbox("تفعيل الرد الصوتي للإجابات", value=True)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 📬 تواصل معنا")
-st.sidebar.markdown("لأي استفسار أو دعم فني:\n[boutoubaamed@gmail.com](mailto:boutoubaamed@gmail.com)")
+
+# عنوان "تواصل معنا" من أقصى اليمين
+st.sidebar.markdown(
+    '<h3 style="text-align: right; color: #1e3a8a; font-family: \'Cairo\', sans-serif; margin-bottom: 10px;">📬 تواصل معنا</h3>', 
+    unsafe_allow_html=True
+)
+
+# نص "لأي استفسار" والإيميل في المنتصف بشكل أنيق
+st.sidebar.markdown(
+    """
+    <div style="text-align: center; font-family: 'Cairo', sans-serif; font-size: 14px;">
+        لأي استفسار أو دعم فني:<br>
+        <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
 
 # ---------------------------------------------------------
 # واجهة الشات وتفعيل النموذج المستقر (3.6)
