@@ -13,43 +13,33 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (حل جذري وموجه لـ RTL بدون تشويه)
+# تصميم وتنسيق CSS (مستقر، آمن، ولا يظهر أي نصوص مخفية)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. توحيد الخط لكامل الواجهة */
-* {
+/* 1. توحيد الخط بأمان تام */
+html, body, p, h1, h2, h3, h4, h5, h6, span, label, div {
     font-family: 'Cairo', sans-serif;
 }
 
-/* 2. حماية الشريط العلوي الخاص بالنظام من الانعكاس */
-header[data-testid="stHeader"] * {
-    direction: ltr !important;
-}
-
-/* 3. فرض اتجاه اليمين (RTL) حصرياً على نصوص المحتوى */
-div.stMarkdown, div.stText, label, p, h1, h2, h3, h4, h5, h6, li {
+/* 2. استهداف نصوص المحتوى فقط للیمین (RTL) دون المساس بهيكل المنصة */
+.stMarkdown, .stText, [data-testid="stWidgetLabel"], [data-testid="stAlert"] {
     direction: rtl !important;
     text-align: right !important;
 }
 
-/* 4. حقول الإدخال (Inputs) وصندوق الشات السُفلي */
-div[data-baseweb="input"] > div, div[data-baseweb="textarea"] > div, div[data-testid="stChatInput"] {
+/* 3. حقول الإدخال وصندوق الشات (يمين) */
+.stTextInput input, .stTextArea textarea, .stChatInput input, .stChatInput textarea {
     direction: rtl !important;
-}
-input, textarea {
     text-align: right !important;
-    direction: rtl !important;
     border-radius: 12px !important;
+    border: 1.5px solid #cbd5e1 !important;
     background-color: #ffffff !important;
 }
-.stTextInput > div > div > input, .stTextArea > div > textarea {
-    border: 1.5px solid #cbd5e1 !important;
-}
 
-/* 5. بطاقات الشات الخاصة بالطلبة والمساعد الذكي */
-div[data-testid="stChatMessage"] {
+/* 4. بطاقات الشات (يمين) */
+[data-testid="stChatMessage"] {
     background-color: #ffffff;
     border-radius: 16px;
     padding: 1.2rem;
@@ -57,13 +47,10 @@ div[data-testid="stChatMessage"] {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     border: 1px solid #e2e8f0;
     direction: rtl !important;
-}
-div[data-testid="stChatMessageContent"] {
-    direction: rtl !important;
     text-align: right !important;
 }
 
-/* 6. الترويسة العليا (جمالية وفي المنتصف) */
+/* 5. الترويسة العليا (جمالية وفي المنتصف) */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -75,7 +62,7 @@ div[data-testid="stChatMessageContent"] {
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    direction: rtl !important;
+    direction: rtl !important; 
 }
 
 .badge-pill {
@@ -123,7 +110,7 @@ div[data-testid="stChatMessageContent"] {
     justify-content: center;
 }
 
-/* 7. الشريط الجانبي وتوسيط الروابط */
+/* 6. تصميم الشريط الجانبي الداخلي */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -131,12 +118,13 @@ div[data-testid="stChatMessageContent"] {
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.02);
 }
 
+/* استثناء التوسيط لروابط معينة (مثل رابط المفتاح) */
 .center-text-sidebar, .center-text-sidebar * {
     text-align: center !important;
     direction: rtl !important;
 }
 
-/* 8. الأزرار العادية */
+/* 7. الأزرار الجانبية العادية */
 .stButton>button {
     width: 100%;
     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
@@ -153,7 +141,7 @@ div[data-testid="stChatMessageContent"] {
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* 9. زر البدء ثلاثي الأبعاد (ChatBot) */
+/* 8. زر البدء ثلاثي الأبعاد (الضخم) */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -183,7 +171,7 @@ button[kind="primary"] div, button[kind="primary"] p {
     justify-content: center !important;
 }
 
-/* 10. التذييل (Footer) */
+/* 9. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
@@ -248,11 +236,12 @@ st.markdown(header_html, unsafe_allow_html=True)
 # ---------------------------------------------------------
 # الشريط الجانبي
 # ---------------------------------------------------------
+# تم تحويل العنوان إلى اليمين بدلاً من المنتصف
 st.sidebar.markdown(
     """
-    <div class="center-text-sidebar" style="margin-bottom: 1.5rem;">
+    <div style="text-align: right; direction: rtl; margin-bottom: 1.5rem;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
-        <div style="width: 40px; height: 4px; background-color: #2563eb; margin: 0 auto; border-radius: 5px;"></div>
+        <div style="width: 40px; height: 4px; background-color: #2563eb; border-radius: 5px;"></div>
     </div>
     """,
     unsafe_allow_html=True
@@ -312,9 +301,10 @@ st.sidebar.markdown(
     unsafe_allow_html=True
 )
 
+# تم تحويل الإيميل إلى اليمين
 st.sidebar.markdown(
     """
-    <div class="center-text-sidebar" style="font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div style="text-align: right; direction: rtl; font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
@@ -323,7 +313,7 @@ st.sidebar.markdown(
 )
 
 # ---------------------------------------------------------
-# واجهة الشات وتفعيل النموذج
+# واجهة الشات وتفعيل النموذج المستقر (3.6)
 # ---------------------------------------------------------
 if st.session_state.get("chat_active", False):
     st.markdown("---")
