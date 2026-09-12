@@ -13,29 +13,27 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# تصميم وتنسيق CSS (تم الفرض الجذري للـ RTL هنا)
+# تصميم وتنسيق CSS (آمن ونظيف 100% لتجنب تشوه المنصة)
 # ---------------------------------------------------------
 st.markdown("""<style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
-/* 1. الفرض الجذري لاتجاه اليمين لليسار (RTL) على جذور التطبيق بالكامل */
-.stApp, [data-testid="stAppViewContainer"], [data-testid="stSidebar"], [data-testid="stHeader"], [data-testid="stToolbar"] {
+/* 1. الخط الأساسي للواجهة */
+* {
+    font-family: 'Cairo', sans-serif;
+}
+
+/* 2. توجيه الحاويات الأساسية لليمين (بشكل آمن لا يضر بأزرار Streamlit العلوية) */
+[data-testid="stAppViewContainer"], [data-testid="stSidebar"] {
     direction: rtl !important;
 }
 
-/* 2. محاذاة كافة النصوص، العناوين، الفقرات، والصناديق حصرياً لليمين */
-html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownContainer"] {
-    font-family: 'Cairo', sans-serif !important;
+/* 3. محاذاة نصوص المحتوى لليمين */
+[data-testid="stMarkdownContainer"] {
     text-align: right !important;
 }
 
-/* 3. صناديق التنبيه (Alerts) والبطاقات (Cards) وحقول الراديو */
-[data-testid="stAlert"], [data-testid="stException"], .stRadio {
-    direction: rtl !important;
-    text-align: right !important;
-}
-
-/* 4. حقول الإدخال (Text Inputs) وصندوق الشات السفلي (Chat Input) */
+/* 4. حقول الإدخال وصندوق الدردشة */
 .stTextInput input, .stTextArea textarea, [data-testid="stChatInput"] textarea, .stChatInput input {
     direction: rtl !important;
     text-align: right !important;
@@ -44,7 +42,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     background-color: #ffffff !important;
 }
 
-/* 5. بطاقات الشات (Chat Messages) الخاصة بالنقاش الطلابي */
+/* 5. بطاقات الشات */
 .stChatMessage {
     background-color: #ffffff;
     border-radius: 16px;
@@ -56,12 +54,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     text-align: right !important;
 }
 
-/* 6. استثناء التوسيط الجمالي للترويسة، التذييل، والزر الرئيسي فقط */
-.header-text-section *, .center-text-sidebar *, .footer-box, button[kind="primary"] * {
-    text-align: center !important;
-}
-
-/* --- باقي التنسيقات الجمالية --- */
+/* 6. الترويسة العليا (جمالية ومحاذاة في المنتصف) */
 .main-header-wrapper {
     background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
     border-radius: 24px;
@@ -73,6 +66,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
     margin-bottom: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    direction: rtl !important;
 }
 
 .badge-pill {
@@ -85,6 +79,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     display: inline-block;
     margin-bottom: 1rem;
     border: 1px solid rgba(147, 197, 253, 0.3);
+    text-align: center !important;
 }
 
 .header-text-section {
@@ -93,7 +88,6 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     flex-direction: column;
     align-items: center; 
     justify-content: center;
-    min-width: 300px;
 }
 
 .header-text-section h1 {
@@ -102,6 +96,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     margin-bottom: 0.5rem;
     color: #ffffff !important;
     line-height: 1.3;
+    text-align: center !important;
 }
 
 .header-sub {
@@ -109,6 +104,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     font-weight: 600;
     color: #cbd5e1 !important;
     margin: 0;
+    text-align: center !important; 
 }
 
 .header-image-section {
@@ -118,6 +114,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     justify-content: center;
 }
 
+/* 7. تصميم الشريط الجانبي */
 [data-testid="stSidebar"] {
     background-color: #ffffff;
     border-left: 1px solid #e2e8f0;
@@ -142,7 +139,7 @@ html, body, p, h1, h2, h3, h4, h5, h6, span, label, div[data-testid="stMarkdownC
     box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
 }
 
-/* زر البدء ثلاثي الأبعاد */
+/* 8. زر البدء ثلاثي الأبعاد */
 button[kind="primary"] {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     font-size: 1.4rem !important;
@@ -154,6 +151,7 @@ button[kind="primary"] {
     font-weight: 800 !important;
     white-space: pre-wrap !important;
     line-height: 1.5 !important;
+    text-align: center !important;
 }
 button[kind="primary"]:hover {
     transform: translateY(-2px) !important;
@@ -164,12 +162,13 @@ button[kind="primary"]:active, button[kind="primary"]:focus {
     box-shadow: 0 0px 0 #047857, 0 5px 10px rgba(16, 185, 129, 0.4) !important;
 }
 
-/* التذييل */
+/* 9. التذييل (Footer) */
 .footer-box {
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
     padding: 1.8rem;
     border-radius: 16px;
+    text-align: center !important;
     color: #64748b !important;
     font-size: 14px;
     font-weight: 600;
@@ -207,7 +206,7 @@ for path in possible_paths:
             pass
 
 if not image_found:
-    st.error(r"⚠️ تنبيه: لم يتم العثور على ملف الصورة.")
+    st.error("⚠️ تنبيه: لم يتم العثور على ملف الصورة.")
 
 # ---------------------------------------------------------
 # الترويسة العليا
@@ -230,7 +229,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 # ---------------------------------------------------------
 st.sidebar.markdown(
     """
-    <div class="center-text-sidebar" style="margin-bottom: 1.5rem;">
+    <div style="text-align: center; margin-bottom: 1.5rem;">
         <h2 style="color: #1e3a8a; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 1.6rem; margin-bottom: 5px;">منصة التفاعل الأكاديمي الذكي</h2>
         <div style="width: 40px; height: 4px; background-color: #2563eb; margin: 0 auto; border-radius: 5px;"></div>
     </div>
@@ -240,7 +239,7 @@ st.sidebar.markdown(
 
 st.sidebar.markdown(
     """
-    <div class="center-text-sidebar" style="margin-bottom: 15px;">
+    <div style="text-align: center; margin-bottom: 15px;">
         <a href="https://aistudio.google.com/" target="_blank" style="text-decoration: none; color: #2563eb; font-weight: bold; font-size: 14px;">
             🔗 احصل على مفتاح مجاني من هنا
         </a>
@@ -273,7 +272,7 @@ else:
                 lecture_text = "\n".join([para.text for para in doc.paragraphs])
 
             if lecture_text.strip():
-                st.sidebar.success(f"تم استخراج المحتوى بنجاح!")
+                st.sidebar.success("تم استخراج المحتوى بنجاح!")
             else:
                 st.sidebar.warning("الملف فارغ أو تعذر استخراج النص.")
         except Exception as e:
@@ -294,7 +293,7 @@ st.sidebar.markdown(
 
 st.sidebar.markdown(
     """
-    <div class="center-text-sidebar" style="font-family: 'Cairo', sans-serif; font-size: 14px;">
+    <div style="text-align: center; font-family: 'Cairo', sans-serif; font-size: 14px;">
         لأي استفسار أو دعم فني:<br>
         <a href="mailto:boutoubaamed@gmail.com" style="text-decoration: none; font-weight: bold; color: #2563eb; font-size: 15px;">boutoubaamed@gmail.com</a>
     </div>
